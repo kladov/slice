@@ -5,6 +5,11 @@ type IndexedStringSlice struct {
 	m map[string]struct{}
 }
 
+type IndexedFloat64Slice struct {
+	s []float64
+	m map[float64]struct{}
+}
+
 type IndexedIntSlice struct {
 	s []int
 	m map[int]struct{}
@@ -32,13 +37,24 @@ func NewIntSlice(s []int) *IndexedIntSlice {
 	}
 }
 
-func (islice *IndexedStringSlice) Append(s string) {
-	islice.s = append(islice.s, s)
-	islice.m[s] = struct{}{}
+func NewFloatSlice(s []float64) *IndexedFloat64Slice {
+	m := make(map[float64]struct{}, len(s))
+	for _, v := range s {
+		m[v] = struct{}{}
+	}
+	return &IndexedFloat64Slice{
+		s: s,
+		m: m,
+	}
 }
 
-func (islice *IndexedStringSlice) Has(s string) bool {
-	_, ok := islice.m[s]
+func (islice *IndexedStringSlice) Append(v string) {
+	islice.s = append(islice.s, v)
+	islice.m[v] = struct{}{}
+}
+
+func (islice *IndexedStringSlice) Has(v string) bool {
+	_, ok := islice.m[v]
 	return ok
 }
 
@@ -46,16 +62,30 @@ func (islice *IndexedStringSlice) Values() []string {
 	return islice.s
 }
 
-func (islice *IndexedIntSlice) Append(s int) {
-	islice.s = append(islice.s, s)
-	islice.m[s] = struct{}{}
+func (islice *IndexedIntSlice) Append(v int) {
+	islice.s = append(islice.s, v)
+	islice.m[v] = struct{}{}
 }
 
-func (islice *IndexedIntSlice) Has(s int) bool {
-	_, ok := islice.m[s]
+func (islice *IndexedIntSlice) Has(v int) bool {
+	_, ok := islice.m[v]
 	return ok
 }
 
 func (islice *IndexedIntSlice) Values() []int {
+	return islice.s
+}
+
+func (islice *IndexedFloat64Slice) Append(s float64) {
+	islice.s = append(islice.s, s)
+	islice.m[s] = struct{}{}
+}
+
+func (islice *IndexedFloat64Slice) Has(v float64) bool {
+	_, ok := islice.m[v]
+	return ok
+}
+
+func (islice *IndexedFloat64Slice) Values() []float64 {
 	return islice.s
 }

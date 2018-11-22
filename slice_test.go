@@ -58,3 +58,31 @@ func TestIntAppend(t *testing.T) {
 		t.Fatalf("should be '%v' given '%v'", expected, islice.Values())
 	}
 }
+
+
+func TestFloatHas(t *testing.T) {
+	islice := NewFloatSlice([]float64{1.1})
+	if !islice.Has(1.1) {
+		t.Fatalf("key '1.1' exist but false returned")
+	}
+}
+
+func TestFloatHasNot(t *testing.T) {
+	islice := NewFloatSlice([]float64{1.1})
+	if islice.Has(1.2) {
+		t.Fatalf("key '1.2' not exists but true")
+	}
+}
+
+func TestFloatAppend(t *testing.T) {
+	expected := []float64{1.1, 1.2}
+	islice := NewFloatSlice([]float64{1.1})
+	islice.Append(1.2)
+	if !islice.Has(1.2) {
+		t.Fatalf("key '1.2' exist but false returned")
+	}
+
+	if !reflect.DeepEqual(expected, islice.Values()) {
+		t.Fatalf("should be '%v' given '%v'", expected, islice.Values())
+	}
+}
